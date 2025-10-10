@@ -1,18 +1,4 @@
-# Smart LPG Pay-As-You-Go System - Hackathon Analysis
 
-## Key Information
-- **Deadline**: October 31, 2025 @ 11:45pm GMT+3
-- **Prizes**: KES 450,000 total (1st: 300k, 2nd: 100k, 3rd: 50k) + internships
-- **Team Size**: 2-5 members
-- **Focus**: Revolutionary IoT + FinTech + AI ecosystem for LPG industry
-
-## Evaluation Criteria Priority
-1. **Impact & Relevance** - Solves real energy/operations challenges ✅ MAXIMUM
-2. **Innovation & Creativity** - Bold, new approaches ✅ FIRST-OF-KIND
-3. **Technical Execution** - Stable, functional prototype ✅ HARDWARE + SOFTWARE
-4. **User Experience** - Usable, intuitive design ✅ MOBILE-FIRST
-5. **Scalability & Feasibility** - Realistic implementation ✅ PROVEN TECH STACK
-6. **Presentation Quality** - Compelling demo and pitch ✅ REVOLUTIONARY DEMO
 
 ## Core Innovation: Smart LPG Ecosystem
 - **Smart IoT Meters**: Hardware devices monitoring gas flow and consumption
@@ -60,11 +46,9 @@
 
 ## Technology Stack Alignment
 - **Frontend**: React.js (Web Dashboard) + Flutter (Mobile Apps)
-- **Backend**: Laravel (API) + Next.js (Admin Portal)
-- **Mobile**: Kotlin (Android native features) + Java (IoT device communication)
+- **Backend**: SSpring Boot (API) + Next.js (Admin Portal)
 - **IoT**: Java-based embedded systems for smart meters
 - **Database**: PostgreSQL + Redis for real-time data
-- **Cloud**: AWS IoT Core + Lambda functions
 
 ## Required Deliverables - REVOLUTIONARY DEMO POTENTIAL
 - ✅ Demo Video: IoT hardware + mobile app + AI dashboard in action

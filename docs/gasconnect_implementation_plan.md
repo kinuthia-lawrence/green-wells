@@ -7,6 +7,11 @@
 
 ---
 
+- Use Arduino/Pi for hardware simulation
+- M-Pesa sandbox for payment testing
+- WebSocket simulation for real-time data
+- Simple ML models for predictive features
+
 ## 🏗️ SYSTEM ARCHITECTURE
 
 ### **IoT Smart Meter (Java-based Embedded System)**

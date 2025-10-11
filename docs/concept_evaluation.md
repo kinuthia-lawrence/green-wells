@@ -71,14 +71,14 @@ Manufacturing Complexity: Medium (existing components, custom assembly)
 Technology Stack Alignment:
 ├── Mobile App (Flutter)
 ├── Backend API (Spring Boot)
-├── Web Dashboard (React/Next.js)
+├── Web Dashboard (React)
 ├── IoT Communication (Java)
 ├── Real-time Data (WebSockets, Redis) 
 └── AI/ML Components
 ```
 
 ### **Development**
-- IoT simulation + Laravel API + Flutter foundation
+- IoT simulation + spring boot API + Flutter foundation
 - Payment integration + real-time monitoring + React dashboard  
 - AI components + advanced features + testing
 - Demo preparation + documentation + pitch materials
@@ -101,3 +101,47 @@ Risk Mitigation:
 4:00-4:45 | Market Vision: Financial inclusion + safety + tech leadership
 4:45-5:00 | Call to Action: "Transform energy for every Kenyan family"
 ```
+
+## Sensor-Backend Communication Methods
+
+This project recommends two best-in-class technologies for real-world smart gas meter communication:
+
+---
+
+### 1. HTTP POST over GSM/Cellular
+
+- **How it works:**  
+  The microcontroller (e.g., Arduino or Raspberry Pi) reads sensor data, formats it (e.g., as JSON), and sends it to the backend server using HTTP POST via a GSM module and SIM card.
+- **Advantages:**  
+  - Direct and reliable data transmission.
+  - Easy to implement with existing libraries and hardware.
+  - Works anywhere with cellular coverage.
+  - Ideal for urban/suburban deployments and rapid MVP rollout.
+- **Bidirectional:**  
+  The device can poll the backend for commands or configuration updates.
+
+---
+
+### 2. LoRaWAN
+
+- **How it works:**  
+  The microcontroller sends sensor data via a LoRa module to a LoRaWAN gateway. The gateway forwards the data to the backend server over the internet.
+- **Advantages:**  
+  - Long-range, low-power communication (up to 10+ km).
+  - Cost-effective for rural or large-scale deployments.
+  - No SIM/data cost per device if you own the gateway.
+  - Excellent for battery-powered and remote installations.
+- **Bidirectional:**  
+  Supports downlink messages from backend to device for control or updates.
+
+---
+
+## Data Flow Overview
+
+1. Sensor reads gas flow.
+2. Microcontroller processes the reading.
+3. Data is formatted (e.g., JSON).
+4. Data is transmitted to backend via HTTP POST (GSM) or LoRaWAN.
+5. Backend receives and stores the data for use by web and mobile applications.
+
+---

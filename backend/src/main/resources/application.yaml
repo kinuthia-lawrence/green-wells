@@ -1,0 +1,51 @@
+# Common configuration for all profiles
+server:
+  port: 8080
+spring:
+  application:
+    name: smart-gas
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+
+# Production profile
+---
+spring:
+  config:
+    activate:
+      on-profile: prod
+  datasource:
+    url: ${NEON_DATABASE_URL}
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+
+# Development profile with H2
+---
+spring:
+  config:
+    activate:
+      on-profile: dev
+  datasource:
+    #    url: jdbc:h2:mem:smartgasdb
+    url: jdbc:h2:file:./data/smartgasdb
+    driver-class-name: org.h2.Driver
+    username: sa
+    password: password
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+  jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.H2Dialect
+
+# Default profile to use if not specified
+---
+spring:
+  profiles:
+    active: dev

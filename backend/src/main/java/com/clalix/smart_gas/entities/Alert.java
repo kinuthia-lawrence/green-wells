@@ -13,12 +13,15 @@ import java.time.LocalDateTime;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Access(AccessType.FIELD)
+@Table(name = "alerts")
 public class Alert {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String message;
+    @Enumerated(EnumType.STRING)
     private AlertType type;
     private AlertSeverity severity;
     private boolean isActive;
@@ -26,7 +29,7 @@ public class Alert {
     private LocalDateTime resolvedAt;
     @Column(name = "user_id", insertable = false, updatable = false)
     private Long userId;
-    @Column(name="device_id")
+    @Column(name = "device_id")
     private String deviceId;
 
     @ManyToOne(fetch = FetchType.LAZY)

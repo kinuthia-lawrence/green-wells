@@ -12,6 +12,8 @@ import java.time.LocalDateTime;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Access(AccessType.FIELD)
+@Table(name = "payments")
 public class Payment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -21,6 +23,7 @@ public class Payment {
     private LocalDateTime paymentTime;
     private PaymentStatus status;
     private String method;
+    @Column(name = "user_id", insertable = false, updatable = false)
     private Long userId;
     @ManyToOne
     private User user;

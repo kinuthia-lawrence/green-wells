@@ -10,6 +10,7 @@ import java.time.LocalDateTime;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Table(name = "refill_schedules")
 public class RefillSchedule {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

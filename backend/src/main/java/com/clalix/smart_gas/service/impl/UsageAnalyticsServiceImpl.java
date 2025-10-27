@@ -1,14 +1,19 @@
 package com.clalix.smart_gas.service.impl;
 
 import com.clalix.smart_gas.dto.UsageAnalytics;
-import com.clalix.smart_gas.repository.*;
+import com.clalix.smart_gas.entities.SensorReading;
+import com.clalix.smart_gas.enums.PaymentStatus;
+import com.clalix.smart_gas.repository.AlertRepository;
+import com.clalix.smart_gas.repository.CylinderRepository;
+import com.clalix.smart_gas.repository.PaymentRepository;
+import com.clalix.smart_gas.repository.SensorReadingRepository;
 import com.clalix.smart_gas.service.interfaces.UsageAnalyticsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Objects;
 
 @Service
 public class UsageAnalyticsServiceImpl implements UsageAnalyticsService {
@@ -29,32 +34,38 @@ public class UsageAnalyticsServiceImpl implements UsageAnalyticsService {
     public UsageAnalytics getUsageAnalytics() {
         UsageAnalytics analytics = new UsageAnalytics();
 
-        // Calculate total usage from all sensor readings
-        Double totalUsage = sensorReadingRepository.findAll().stream()
-                .mapToDouble(reading -> reading.getGasLevel())
+        // Calculate total usage from all sensor readings (use existing getter 'getGasValue')
+        double totalUsage = sensorReadingRepository.findAll().stream()
+                .mapToDouble(SensorReading::getGasValue)
                 .sum();
 
         // Calculate average usage
-        Long totalReadings = sensorReadingRepository.count();
+        long totalReadings = sensorReadingRepository.count();
         Double averageUsage = totalReadings > 0 ? totalUsage / totalReadings : 0.0;
 
-        // Count active devices (cylinders with recent readings)
+        // Count active devices (cylinders with recent readings) using sensor readings in last 24 hours
         LocalDateTime last24Hours = LocalDateTime.now().minusHours(24);
-        Integer activeDevices = cylinderRepository.countActiveCylinders(last24Hours);
+        long activeDevicesCount = sensorReadingRepository.findAll().stream()
+                .filter(r -> r.getTimestamp() != null && r.getTimestamp().isAfter(last24Hours))
+                .map(SensorReading::getDeviceId)
+                .filter(Objects::nonNull)
+                .distinct()
+                .count();
+        Integer activeDevices = (int) activeDevicesCount;
 
         // Count total alerts
         Integer totalAlerts = Math.toIntExact(alertRepository.count());
 
         // Payment statistics
-        BigDecimal totalRevenue = paymentRepository.getTotalRevenue();
-        Integer pendingPayments = Math.toIntExact(paymentRepository.countByStatus("PENDING"));
-        Integer failedPayments = Math.toIntExact(paymentRepository.countByStatus("FAILED"));
+        Double totalRevenue = paymentRepository.getTotalRevenue();
+        Integer pendingPayments = Math.toIntExact(paymentRepository.countByStatus(PaymentStatus.PENDING));
+        Integer failedPayments = Math.toIntExact(paymentRepository.countByStatus(PaymentStatus.FAILED));
 
         analytics.setTotalUsage(totalUsage);
         analytics.setAverageUsage(averageUsage);
         analytics.setActiveDevices(activeDevices);
         analytics.setTotalAlerts(totalAlerts);
-        analytics.setTotalRevenue(totalRevenue != null ? totalRevenue : BigDecimal.ZERO);
+        analytics.setTotalRevenue(totalRevenue != null ? totalRevenue : 0);
         analytics.setPendingPayments(pendingPayments);
         analytics.setFailedPayments(failedPayments);
         analytics.setLastUpdated(LocalDateTime.now());
@@ -66,19 +77,22 @@ public class UsageAnalyticsServiceImpl implements UsageAnalyticsService {
     public UsageAnalytics getUsageAnalyticsForDevice(String deviceId) {
         UsageAnalytics analytics = new UsageAnalytics();
 
-        // Calculate usage for specific device
-        Double totalUsage = sensorReadingRepository.findByCylinderDeviceId(deviceId).stream()
-                .mapToDouble(reading -> reading.getGasLevel())
+        // Calculate usage for specific device (use getGasValue)
+        Double totalUsage = sensorReadingRepository.findAll().stream()
+                .filter(r -> deviceId != null && deviceId.equals(r.getDeviceId()))
+                .mapToDouble(SensorReading::getGasValue)
                 .sum();
 
-        Long readingsCount = sensorReadingRepository.countByCylinderDeviceId(deviceId);
+        long readingsCount = sensorReadingRepository.findAll().stream()
+                .filter(r -> deviceId != null && deviceId.equals(r.getDeviceId()))
+                .count();
         Double averageUsage = readingsCount > 0 ? totalUsage / readingsCount : 0.0;
 
-        // Check if device is active
         LocalDateTime last24Hours = LocalDateTime.now().minusHours(24);
-        Integer activeDevices = sensorReadingRepository.existsByCylinderDeviceIdAndTimestampAfter(deviceId, last24Hours) ? 1 : 0;
+        Integer activeDevices = sensorReadingRepository.findAll().stream()
+                .filter(r -> deviceId != null && deviceId.equals(r.getDeviceId()))
+                .anyMatch(r -> r.getTimestamp() != null && r.getTimestamp().isAfter(last24Hours)) ? 1 : 0;
 
-        // Count alerts for this device
         Integer totalAlerts = Math.toIntExact(alertRepository.countByCylinderDeviceId(deviceId));
 
         analytics.setTotalUsage(totalUsage);
@@ -98,12 +112,12 @@ public class UsageAnalyticsServiceImpl implements UsageAnalyticsService {
 
         UsageAnalytics analytics = new UsageAnalytics();
 
-        // Calculate usage within date range
+        // Calculate usage within date range (use getGasValue)
         Double totalUsage = sensorReadingRepository.findByTimestampBetween(start, end).stream()
-                .mapToDouble(reading -> reading.getGasLevel())
+                .mapToDouble(SensorReading::getGasValue)
                 .sum();
 
-        Long readingsCount = sensorReadingRepository.countByTimestampBetween(start, end);
+        long readingsCount = sensorReadingRepository.countByTimestampBetween(start, end);
         Double averageUsage = readingsCount > 0 ? totalUsage / readingsCount : 0.0;
 
         // Count active devices in date range
@@ -113,15 +127,15 @@ public class UsageAnalyticsServiceImpl implements UsageAnalyticsService {
         Integer totalAlerts = Math.toIntExact(alertRepository.countByTimestampBetween(start, end));
 
         // Payment statistics for date range
-        BigDecimal totalRevenue = paymentRepository.getTotalRevenueByDateRange(start, end);
-        Integer pendingPayments = Math.toIntExact(paymentRepository.countByStatusAndTimestampBetween("PENDING", start, end));
-        Integer failedPayments = Math.toIntExact(paymentRepository.countByStatusAndTimestampBetween("FAILED", start, end));
+        Double totalRevenue = paymentRepository.getTotalRevenueByDateRange(start, end);
+        Integer pendingPayments = Math.toIntExact(paymentRepository.countByStatusAndPaymentTimeBetween(PaymentStatus.PENDING, start, end));
+        Integer failedPayments = Math.toIntExact(paymentRepository.countByStatusAndPaymentTimeBetween(PaymentStatus.FAILED, start, end));
 
         analytics.setTotalUsage(totalUsage);
         analytics.setAverageUsage(averageUsage);
         analytics.setActiveDevices(activeDevices);
         analytics.setTotalAlerts(totalAlerts);
-        analytics.setTotalRevenue(totalRevenue != null ? totalRevenue : BigDecimal.ZERO);
+        analytics.setTotalRevenue(totalRevenue != null ? totalRevenue : 0);
         analytics.setPendingPayments(pendingPayments);
         analytics.setFailedPayments(failedPayments);
         analytics.setLastUpdated(LocalDateTime.now());

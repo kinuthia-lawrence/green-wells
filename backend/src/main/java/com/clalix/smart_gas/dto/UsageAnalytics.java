@@ -15,7 +15,7 @@ public class UsageAnalytics {
     private Double averageUsage;
     private Integer activeDevices;
     private Integer totalAlerts;
-    private BigDecimal totalRevenue;
+    private Double totalRevenue;
     private Integer pendingPayments;
     private Integer failedPayments;
     private LocalDateTime lastUpdated;

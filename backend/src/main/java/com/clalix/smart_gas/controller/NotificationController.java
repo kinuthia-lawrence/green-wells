@@ -1,5 +1,6 @@
 package com.clalix.smart_gas.controller;
 
+import com.clalix.smart_gas.dto.NotificationDto;
 import com.clalix.smart_gas.responses.ApiResponse;
 import com.clalix.smart_gas.service.interfaces.NotificationService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,8 +18,8 @@ public class NotificationController {
     private NotificationService notificationService;
 
     @GetMapping
-    public ResponseEntity<ApiResponse<List<Object>>> getUserNotifications(@RequestParam(required = false) Long userId) {
-        List<Object> notifications = notificationService.getUserNotifications(userId);
+    public ResponseEntity<ApiResponse<List<NotificationDto>>> getUserNotifications(@RequestParam(required = false) Long userId) {
+        List<NotificationDto> notifications = notificationService.getByUserId(userId);
         return ResponseEntity.ok(new ApiResponse<>(true, "Notifications retrieved", notifications));
     }
 }

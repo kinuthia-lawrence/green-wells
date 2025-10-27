@@ -29,8 +29,8 @@ public class PaymentController {
     }
 
     @GetMapping("/summary")
-    public ResponseEntity<ApiResponse<Object>> getPaymentSummary() {
-        Object summary = paymentService.getPaymentSummary();
+    public ResponseEntity<ApiResponse<Object>> getPaymentSummary(Long userId) {
+        Object summary = paymentService.getPaymentSummary(userId);
         return ResponseEntity.ok(new ApiResponse<>(true, "Payment summary retrieved", summary));
     }
 }

@@ -1,5 +1,6 @@
 package com.clalix.smart_gas.entities;
 
+import com.clalix.smart_gas.enums.PaymentStatus;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -18,8 +19,9 @@ public class Payment {
     private String transactionId;
     private Double amount;
     private LocalDateTime paymentTime;
-    private String status;
+    private PaymentStatus status;
     private String method;
+    private Long userId;
     @ManyToOne
     private User user;
 }

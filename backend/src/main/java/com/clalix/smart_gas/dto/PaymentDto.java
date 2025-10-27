@@ -1,5 +1,6 @@
 package com.clalix.smart_gas.dto;
 
+import com.clalix.smart_gas.enums.PaymentStatus;
 import lombok.Data;
 import java.time.LocalDateTime;
 
@@ -9,7 +10,7 @@ public class PaymentDto {
     private String transactionId;
     private Double amount;
     private LocalDateTime paymentTime;
-    private String status;
+    private PaymentStatus status;
     private String method;
     private Long userId;
 }

@@ -17,7 +17,7 @@ import java.math.BigDecimal;
 public class PaymentRequest {
     @NotNull(message = "Amount is required")
     @Positive(message = "Amount must be positive")
-    private BigDecimal amount;
+    private Double amount;
 
     @NotBlank(message = "Phone number is required")
     @Pattern(regexp = "^(\\+254|254|0)?[17]\\d{8}$", message = "Invalid Kenyan phone number format")
@@ -26,6 +26,5 @@ public class PaymentRequest {
     private String description;
     private String deviceId;
     private Long userId;
-
-
+    private String method;
 }

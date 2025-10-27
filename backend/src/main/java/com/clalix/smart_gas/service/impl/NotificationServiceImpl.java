@@ -8,6 +8,7 @@ import com.clalix.smart_gas.repository.UserRepository;
 import com.clalix.smart_gas.service.interfaces.NotificationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -25,6 +26,7 @@ public class NotificationServiceImpl implements NotificationService {
         dto.setMessage(notification.getMessage());
         dto.setRead(notification.isRead());
         dto.setTimestamp(notification.getTimestamp());
+        dto.setUserId(notification.getUserId());
         if (notification.getUser() != null) dto.setUserId(notification.getUser().getId());
         return dto;
     }
@@ -35,6 +37,7 @@ public class NotificationServiceImpl implements NotificationService {
         notification.setMessage(dto.getMessage());
         notification.setRead(dto.isRead());
         notification.setTimestamp(dto.getTimestamp());
+        notification.setUserId(notification.getUserId());
         if (dto.getUserId() != null) {
             Optional<User> user = userRepository.findById(dto.getUserId());
             user.ifPresent(notification::setUser);
@@ -51,6 +54,11 @@ public class NotificationServiceImpl implements NotificationService {
     @Override
     public NotificationDto getById(Long id) {
         return notificationRepository.findById(id).map(this::toDto).orElse(null);
+    }
+
+    @Override
+    public List<NotificationDto> getByUserId(Long id) {
+        return notificationRepository.findByUserId(id).stream().map(this::toDto).collect(Collectors.toList());
     }
 
     @Override

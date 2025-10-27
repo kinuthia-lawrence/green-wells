@@ -9,5 +9,6 @@ public interface RouteService {
     List<RouteDto> getAll();
     RouteDto update(Long id, RouteDto routeDto);
     void delete(Long id);
+    RouteDto getOptimizedRoute(String deviceId);
 }
 

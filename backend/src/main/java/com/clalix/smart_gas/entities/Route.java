@@ -15,6 +15,7 @@ public class Route {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
+    private String deviceId;
     private String description;
     @OneToMany(mappedBy = "route")
     private List<RefillSchedule> refillSchedules;

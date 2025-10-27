@@ -6,6 +6,7 @@ import com.clalix.smart_gas.repository.RouteRepository;
 import com.clalix.smart_gas.service.interfaces.RouteService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -19,6 +20,7 @@ public class RouteServiceImpl implements RouteService {
         dto.setId(route.getId());
         dto.setName(route.getName());
         dto.setDescription(route.getDescription());
+        dto.setDeviceId(route.getDeviceId());
         return dto;
     }
 
@@ -27,6 +29,7 @@ public class RouteServiceImpl implements RouteService {
         route.setId(dto.getId());
         route.setName(dto.getName());
         route.setDescription(dto.getDescription());
+        route.setDeviceId(dto.getDeviceId());
         return route;
     }
 
@@ -57,6 +60,11 @@ public class RouteServiceImpl implements RouteService {
     @Override
     public void delete(Long id) {
         routeRepository.deleteById(id);
+    }
+
+    @Override
+    public RouteDto getOptimizedRoute(String deviceId) {
+        return routeRepository.findByDeviceId(deviceId).map(this::toDto).orElse(null);
     }
 }
 

@@ -7,5 +7,6 @@ public class RouteDto {
     private Long id;
     private String name;
     private String description;
+    private String deviceId;
 }
 

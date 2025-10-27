@@ -113,7 +113,7 @@ public class UsageAnalyticsServiceImpl implements UsageAnalyticsService {
         UsageAnalytics analytics = new UsageAnalytics();
 
         // Calculate usage within date range (use getGasValue)
-        Double totalUsage = sensorReadingRepository.findByTimestampBetween(start, end).stream()
+        double totalUsage = sensorReadingRepository.findByTimestampBetween(start, end).stream()
                 .mapToDouble(SensorReading::getGasValue)
                 .sum();
 

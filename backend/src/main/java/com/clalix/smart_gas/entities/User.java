@@ -1,5 +1,6 @@
 package com.clalix.smart_gas.entities;
 
+import com.clalix.smart_gas.enums.UserRole;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -19,7 +20,7 @@ public class User {
     private String email;
     private String phoneNumber;
     private String password;
-    private String role;
+    private UserRole role;
     @OneToMany(mappedBy = "user")
     private List<Payment> payments;
     @OneToMany(mappedBy = "user")

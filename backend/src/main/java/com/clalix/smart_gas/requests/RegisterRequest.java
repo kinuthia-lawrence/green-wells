@@ -1,6 +1,5 @@
-package com.clalix.smart_gas.dto;
+package com.clalix.smart_gas.requests;
 
-import com.clalix.smart_gas.enums.UserRole;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -8,11 +7,10 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class UserDto {
-    private Long id;
+public class RegisterRequest {
     private String username;
     private String email;
+    private String password;
     private String phoneNumber;
-    private UserRole role;
+    private String role;
 }
-

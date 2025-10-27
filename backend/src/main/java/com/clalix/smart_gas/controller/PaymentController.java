@@ -4,13 +4,14 @@ import com.clalix.smart_gas.responses.ApiResponse;
 import com.clalix.smart_gas.requests.PaymentRequest;
 import com.clalix.smart_gas.responses.PaymentResponse;
 import com.clalix.smart_gas.service.interfaces.PaymentService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/payment")
-@CrossOrigin(origins = "*")
+@Tag(name = "Payment", description = "Payment API's")
 public class PaymentController {
 
     @Autowired

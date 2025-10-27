@@ -2,10 +2,20 @@ package com.clalix.smart_gas.service.impl;
 
 import com.clalix.smart_gas.dto.UserDto;
 import com.clalix.smart_gas.entities.User;
+import com.clalix.smart_gas.enums.UserRole;
 import com.clalix.smart_gas.repository.UserRepository;
+import com.clalix.smart_gas.requests.LoginRequest;
+import com.clalix.smart_gas.requests.RegisterRequest;
+import com.clalix.smart_gas.responses.AuthResponse;
 import com.clalix.smart_gas.service.interfaces.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -13,6 +23,10 @@ import java.util.stream.Collectors;
 public class UserServiceImpl implements UserService {
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    PasswordEncoder passwordEncoder;
+    @Autowired
+    AuthenticationManager authenticationManager;
 
     private UserDto toDto(User user) {
         UserDto dto = new UserDto();
@@ -46,7 +60,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<UserDto> getAll() {
+    public List<UserDto> findAll() {
         return userRepository.findAll().stream().map(this::toDto).collect(Collectors.toList());
     }
 
@@ -61,6 +75,41 @@ public class UserServiceImpl implements UserService {
     @Override
     public void delete(Long id) {
         userRepository.deleteById(id);
+    }
+
+    @Override
+    public AuthResponse login(LoginRequest req) {
+        try {
+            Authentication authentication = authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(req.getUsername(), req.getPassword()));
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+            return new AuthResponse("Login successful");
+        } catch (org.springframework.security.core.AuthenticationException ex) {
+            throw new org.springframework.web.server.ResponseStatusException(org.springframework.http.HttpStatus.UNAUTHORIZED, "Invalid credentials");
+        }
+    }
+
+    @Override
+    public AuthResponse register(RegisterRequest req) {
+        if (userRepository.findByUsernameOrEmail(req.getUsername()).isPresent()) {
+            throw new IllegalArgumentException("Username or email already in use");
+        }
+        User user = new User();
+        user.setUsername(req.getUsername());
+        user.setEmail(req.getEmail());
+        user.setPhoneNumber(req.getPhoneNumber());
+        UserRole role = UserRole.USER;
+        if (req.getRole() != null && !req.getRole().isBlank()) {
+            try {
+                role = UserRole.valueOf(req.getRole());
+            } catch (IllegalArgumentException e) {
+                role = UserRole.USER;
+            }
+        }
+        user.setRole(role);
+        user.setPassword(passwordEncoder.encode(req.getPassword()));
+        userRepository.save(user);
+        return new AuthResponse("User registered");
     }
 }
 

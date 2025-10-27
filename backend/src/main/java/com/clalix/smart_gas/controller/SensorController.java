@@ -1,0 +1,37 @@
+package com.clalix.smart_gas.controller;
+
+import com.clalix.smart_gas.responses.ApiResponse;
+import com.clalix.smart_gas.dto.SensorReadingDto;
+import com.clalix.smart_gas.service.interfaces.SensorService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
+@RestController
+@RequestMapping("/api/sensor")
+@CrossOrigin(origins = "*")
+public class SensorController {
+
+    @Autowired
+    private SensorService sensorService;
+
+    @GetMapping("/latest")
+    public ResponseEntity<ApiResponse<SensorReadingDto>> getLatestReading(@RequestParam String deviceId) {
+        SensorReadingDto reading = sensorService.getLatestReading(deviceId);
+        return ResponseEntity.ok(new ApiResponse<>(true, "Latest reading retrieved", reading));
+    }
+
+    @GetMapping("/history")
+    public ResponseEntity<ApiResponse<List<SensorReadingDto>>> getReadingHistory(@RequestParam String deviceId) {
+        List<SensorReadingDto> history = sensorService.getReadingHistory(deviceId);
+        return ResponseEntity.ok(new ApiResponse<>(true, "Reading history retrieved", history));
+    }
+
+    @GetMapping("/all")
+    public ResponseEntity<ApiResponse<List<SensorReadingDto>>> getAllReadings() {
+        List<SensorReadingDto> readings = sensorService.getAllReadings();
+        return ResponseEntity.ok(new ApiResponse<>(true, "All readings retrieved", readings));
+    }
+}

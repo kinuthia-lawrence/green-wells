@@ -4,6 +4,7 @@ import com.clalix.smart_gas.enums.AlertSeverity;
 import com.clalix.smart_gas.enums.AlertType;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -13,6 +14,7 @@ import java.time.LocalDateTime;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 @Access(AccessType.FIELD)
 @Table(name = "alerts")
 public class Alert {

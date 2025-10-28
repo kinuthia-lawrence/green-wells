@@ -3,6 +3,7 @@ package com.clalix.smart_gas.entities;
 import com.clalix.smart_gas.enums.GasStatus;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -12,6 +13,7 @@ import java.time.LocalDateTime;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 @Table(name = "sensor_readings")
 public class SensorReading {
     @Id

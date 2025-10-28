@@ -1,12 +1,6 @@
 package com.clalix.smart_gas.entities;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.PrePersist;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -47,4 +41,8 @@ public class Device {
             createdAt = LocalDateTime.now();
         }
     }
+
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
 }

@@ -3,6 +3,7 @@ package com.clalix.smart_gas.entities;
 import com.clalix.smart_gas.enums.CylinderStatus;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -10,6 +11,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 @Table(name = "cylinders")
 public class Cylinder {
     @Id

@@ -205,28 +205,55 @@ const Home: React.FC = () => {
       </nav>
 
       {/* Body */}
-      <main className="flex-1 w-full px-4 py-6 max-w-7xl mx-auto">
+      <main className="flex-1 w-full px-4 py-2 max-w-7xl mx-auto">
         {/* Hero Section */}
         <section className="flex flex-col md:flex-row gap-8 md:gap-4 items-center mb-8 md:mb-4 min-h-[60vh] md:min-h-[50vh]">
           <div className="flex-1 flex flex-col gap-4 md:gap-2 max-w-3xl">
-            <h1 className="text-4xl md:text-5xl font-extrabold text-green-700 mb-4 leading-tight">
-              SmartGas Pro
-            </h1>
-            <h2 className="text-xl md:text-2xl font-semibold text-green-800 mb-2">
+            <div className="flex items-center gap-3 mb-2">
+              <FaGasPump className="text-green-700 text-5xl drop-shadow" />
+              <h1 className="text-4xl md:text-5xl font-extrabold text-green-700 leading-tight tracking-tight">
+                SmartGas Pro
+              </h1>
+            </div>
+            <h2 className="text-2xl md:text-3xl font-semibold text-green-800 mb-3">
               Pay for what you use, know what you consume, stay safe always
             </h2>
-            <p className="text-lg text-gray-700 mb-4">
-              Revolutionizing LPG access in Kenya with IoT smart meters, mobile
-              payments, and real-time safety monitoring. Affordable, safe, and
-              transparent energy for every family and business.
+            <p className="text-lg text-gray-700 mb-4 max-w-2xl">
+              <span className="font-bold text-green-700">
+                Revolutionizing LPG access in Kenya
+              </span>{" "}
+              with IoT smart meters, mobile payments, and real-time safety
+              monitoring.
+              <br />
+              <span className="text-green-800 font-semibold">
+                Affordable, safe, and transparent energy for every family and
+                business.
+              </span>
             </p>
-            <ul className="list-disc pl-6 text-green-900 text-base mb-4">
-              <li>Micro-payments from KES 50 — no upfront cylinder cost</li>
-              <li>Real-time usage tracking and spending analytics</li>
-              <li>Automatic leak detection and emergency shutoff</li>
-              <li>Mobile app for top-ups, alerts, and family monitoring</li>
-              <li>Eco-friendly, safe, and scalable for all communities</li>
-            </ul>
+            <div className="bg-green-50 border-l-4 border-green-700 rounded-lg p-4 mb-4 shadow-sm">
+              <ul className="list-none text-green-900 text-base grid grid-cols-1 sm:grid-cols-2 gap-y-2 gap-x-8">
+                <li className="flex items-center gap-2">
+                  <FaMobileAlt className="text-green-600" />
+                  Micro-payments from KES 50 — no upfront cylinder cost
+                </li>
+                <li className="flex items-center gap-2">
+                  <MdOutlineDashboard className="text-green-600" />
+                  Real-time usage tracking & spending analytics
+                </li>
+                <li className="flex items-center gap-2">
+                  <FaLock className="text-green-600" />
+                  Automatic leak detection & emergency shutoff
+                </li>
+                <li className="flex items-center gap-2">
+                  <FaRobot className="text-green-600" />
+                  Mobile app for top-ups, alerts, and family monitoring
+                </li>
+                <li className="flex items-center gap-2">
+                  <FaLeaf className="text-green-600" />
+                  Eco-friendly, safe, and scalable for all communities
+                </li>
+              </ul>
+            </div>
             <div className="flex gap-4 mt-2">
               <button
                 className="bg-green-700 text-white px-6 py-3 rounded font-bold shadow hover:bg-green-800 transition"
@@ -240,6 +267,17 @@ const Home: React.FC = () => {
               >
                 Go to Dashboard
               </a>
+            </div>
+            <div className="mt-6 flex flex-wrap gap-4">
+              <div className="flex items-center gap-2 bg-green-100 px-4 py-2 rounded-full font-semibold text-green-800 shadow">
+                <FaUserShield className="text-green-700" /> Safety First
+              </div>
+              <div className="flex items-center gap-2 bg-green-50 px-4 py-2 rounded-full font-semibold text-green-800 shadow">
+                <FaChartLine className="text-green-700" /> Analytics & Insights
+              </div>
+              <div className="flex items-center gap-2 bg-green-200 px-4 py-2 rounded-full font-semibold text-green-800 shadow">
+                <FaLeaf className="text-green-700" /> Eco-Friendly
+              </div>
             </div>
           </div>
           <div className="flex-1 grid grid-cols-1 sm:grid-cols-2 gap-4 w-full max-w-md">
@@ -436,21 +474,31 @@ const Home: React.FC = () => {
         </button>
       </main>
 
-          {/*  Pricing, FAQ Sections */}
-           <section id="pricing" className="w-full px-4 py-12 max-w-6xl mx-auto">
-        <h2 className="text-2xl font-bold text-green-700 mb-6">SmartGas Pro Pricing</h2>
+      {/*  Pricing, FAQ Sections */}
+      <section id="pricing" className="w-full px-4 py-12 max-w-6xl mx-auto">
+        <h2 className="text-2xl font-bold text-green-700 mb-6">
+          SmartGas Pro Pricing
+        </h2>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {/* Pay-As-You-Go */}
           <div className="rounded-lg shadow p-6 md:p-4 bg-green-50 flex flex-col items-center border border-green-200 hover:shadow-xl transition">
             <div className="flex items-center justify-center w-12 h-12 rounded-full bg-white shadow mb-3">
               <FaGasPump className="text-green-700 text-2xl" />
             </div>
-            <h3 className="text-xl font-bold text-green-700 mb-2">Pay-As-You-Go</h3>
+            <h3 className="text-xl font-bold text-green-700 mb-2">
+              Pay-As-You-Go
+            </h3>
             <p className="text-gray-700 mb-2 text-center">
-              <span className="font-bold">Pay for what you use.</span> Top up from as little as <span className="font-bold">KES 50</span> via mobile money. No upfront cylinder cost, no monthly fees.
+              <span className="font-bold">Pay for what you use.</span> Top up
+              from as little as <span className="font-bold">KES 50</span> via
+              mobile money. No upfront cylinder cost, no monthly fees.
             </p>
-            <span className="text-3xl font-extrabold text-green-900 mb-1">KES 50</span>
-            <span className="text-xs text-gray-500 mb-3">minimum per refill</span>
+            <span className="text-3xl font-extrabold text-green-900 mb-1">
+              KES 50
+            </span>
+            <span className="text-xs text-gray-500 mb-3">
+              minimum per refill
+            </span>
             <span className="inline-block px-3 py-1 bg-green-100 text-green-700 rounded-full text-xs font-semibold border border-green-200">
               Most Accessible
             </span>
@@ -460,12 +508,20 @@ const Home: React.FC = () => {
             <div className="flex items-center justify-center w-12 h-12 rounded-full bg-white shadow mb-3">
               <FaLock className="text-green-700 text-2xl" />
             </div>
-            <h3 className="text-xl font-bold text-green-700 mb-2">Safety & Business Features</h3>
+            <h3 className="text-xl font-bold text-green-700 mb-2">
+              Safety & Business Features
+            </h3>
             <p className="text-gray-700 mb-2 text-center">
-              All users get leak detection, emergency shutoff, instant alerts, and access to analytics and route optimization. <br />
-              <span className="font-bold text-green-900">No extra monthly fees.</span> Businesses can contact us for custom fleet solutions.
+              All users get leak detection, emergency shutoff, instant alerts,
+              and access to analytics and route optimization. <br />
+              <span className="font-bold text-green-900">
+                No extra monthly fees.
+              </span>{" "}
+              Businesses can contact us for custom fleet solutions.
             </p>
-            <span className="text-3xl font-extrabold text-green-900 mb-1">Included</span>
+            <span className="text-3xl font-extrabold text-green-900 mb-1">
+              Included
+            </span>
             <span className="text-xs text-gray-500 mb-3">for all users</span>
             <span className="inline-block px-3 py-1 bg-green-200 text-green-900 rounded-full text-xs font-semibold border border-green-300">
               Safety & Analytics
@@ -474,10 +530,12 @@ const Home: React.FC = () => {
         </div>
         <div className="mt-8 text-center text-green-800 font-semibold">
           <FaMobileAlt className="inline mr-2 text-green-700" />
-          <span>All payments are pay-as-you-go. You only pay for the gas you use.</span>
+          <span>
+            All payments are pay-as-you-go. You only pay for the gas you use.
+          </span>
         </div>
       </section>
-      
+
       <section id="faq" className="w-full px-4 py-12 max-w-7xl mx-auto">
         <h2 className="text-2xl font-bold text-green-700 mb-6 flex items-center gap-2">
           <FaRobot className="text-green-700 text-2xl" />
@@ -532,9 +590,7 @@ const Home: React.FC = () => {
 
       {/* Sticky Footer */}
       <footer className="w-full border-t border-gray-200 px-4 py-4 flex flex-col md:flex-row md:items-center md:justify-between bg-white text-black sticky bottom-0 left-0 z-40">
-        <div className="text-sm">
-          &copy; 2025 SmartGas Pro, Clalix
-        </div>
+        <div className="text-sm">&copy; 2025 SmartGas Pro, Clalix</div>
         <div className="hidden md:flex md:w-1/2 justify-end gap-6 mt-2 md:mt-0">
           <span className="text-green-700 font-regular text-sm">
             IoT • FinTech • Energy Access • Safety Monitoring

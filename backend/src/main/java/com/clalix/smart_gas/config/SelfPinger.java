@@ -14,7 +14,7 @@ public class SelfPinger {
     @Scheduled(fixedRate = 300000)
     public void ping() {
         try {
-            restTemplate.getForObject("https://smart-wifi.onrender.com/actuator/health", String.class);
+            restTemplate.getForObject("https://smart-gas.onrender.com/actuator/health", String.class);
             log.info("Self-ping successful");
         } catch (Exception e) {
             log.error("Self-ping failed", e);

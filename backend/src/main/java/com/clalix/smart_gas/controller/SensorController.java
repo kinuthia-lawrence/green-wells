@@ -21,18 +21,18 @@ public class SensorController {
     @GetMapping("/latest")
     public ResponseEntity<ApiResponse<SensorReadingDto>> getLatestReading(@RequestParam String deviceId) {
         SensorReadingDto reading = sensorService.getLatestReading(deviceId);
-        return ResponseEntity.ok(new ApiResponse<>(true, "Latest reading retrieved", reading));
+        return ResponseEntity.ok(ApiResponse.success("Latest reading retrieved", reading));
     }
 
     @GetMapping("/history")
     public ResponseEntity<ApiResponse<List<SensorReadingDto>>> getReadingHistory(@RequestParam String deviceId) {
         List<SensorReadingDto> history = sensorService.getReadingHistory(deviceId);
-        return ResponseEntity.ok(new ApiResponse<>(true, "Reading history retrieved", history));
+        return ResponseEntity.ok(ApiResponse.success("Reading history retrieved", history));
     }
 
     @GetMapping("/all")
     public ResponseEntity<ApiResponse<List<SensorReadingDto>>> getAllReadings() {
         List<SensorReadingDto> readings = sensorService.getAllReadings();
-        return ResponseEntity.ok(new ApiResponse<>(true, "All readings retrieved", readings));
+        return ResponseEntity.ok(ApiResponse.success("All readings retrieved", readings));
     }
 }

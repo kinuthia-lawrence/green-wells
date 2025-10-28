@@ -24,6 +24,6 @@ public class NotificationController {
     @GetMapping
     public ResponseEntity<ApiResponse<List<NotificationDto>>> getUserNotifications(@RequestParam(required = false) Long userId) {
         List<NotificationDto> notifications = notificationService.getByUserId(userId);
-        return ResponseEntity.ok(new ApiResponse<>(true, "Notifications retrieved", notifications));
+        return ResponseEntity.ok(ApiResponse.success("Notifications retrieved", notifications));
     }
 }

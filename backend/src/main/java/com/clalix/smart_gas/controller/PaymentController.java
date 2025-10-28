@@ -20,18 +20,18 @@ public class PaymentController {
     @PostMapping("/initiate")
     public ResponseEntity<ApiResponse<PaymentResponse>> initiatePayment(@RequestBody PaymentRequest request) {
         PaymentResponse response = paymentService.initiatePayment(request);
-        return ResponseEntity.ok(new ApiResponse<>(true, "Payment initiated", response));
+        return ResponseEntity.ok(ApiResponse.success("Payment initiated", response));
     }
 
     @GetMapping("/status/{transactionId}")
     public ResponseEntity<ApiResponse<PaymentResponse>> getPaymentStatus(@PathVariable String transactionId) {
         PaymentResponse response = paymentService.getPaymentStatus(transactionId);
-        return ResponseEntity.ok(new ApiResponse<>(true, "Payment status retrieved", response));
+        return ResponseEntity.ok(ApiResponse.success("Payment status retrieved", response));
     }
 
     @GetMapping("/summary")
-    public ResponseEntity<ApiResponse<Object>> getPaymentSummary(Long userId) {
+    public ResponseEntity<ApiResponse<Object>> getPaymentSummary(@RequestParam(required = false) Long userId) {
         Object summary = paymentService.getPaymentSummary(userId);
-        return ResponseEntity.ok(new ApiResponse<>(true, "Payment summary retrieved", summary));
+        return ResponseEntity.ok(ApiResponse.success("Payment summary retrieved", summary));
     }
 }

@@ -4,7 +4,6 @@ import com.clalix.smart_gas.dto.UsageAnalytics;
 import com.clalix.smart_gas.responses.ApiResponse;
 import com.clalix.smart_gas.service.interfaces.UsageAnalyticsService;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,12 +14,15 @@ import org.springframework.web.bind.annotation.RestController;
 @Tag(name = "Analytics", description = "Analytics API's")
 public class AnalyticsController {
 
-    @Autowired
-    private UsageAnalyticsService analyticsService;
+    private final UsageAnalyticsService analyticsService;
+
+    public AnalyticsController(UsageAnalyticsService analyticsService) {
+        this.analyticsService = analyticsService;
+    }
 
     @GetMapping
     public ResponseEntity<ApiResponse<UsageAnalytics>> getAnalytics() {
         UsageAnalytics analytics = analyticsService.getUsageAnalytics();
-        return ResponseEntity.ok(new ApiResponse<>(true, "Analytics retrieved", analytics));
+        return ResponseEntity.ok(ApiResponse.success("Analytics retrieved", analytics));
     }
 }

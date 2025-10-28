@@ -3,6 +3,7 @@ package com.clalix.smart_gas.controller;
 import com.clalix.smart_gas.dto.UserDto;
 import com.clalix.smart_gas.requests.LoginRequest;
 import com.clalix.smart_gas.requests.RegisterRequest;
+import com.clalix.smart_gas.responses.ApiResponse;
 import com.clalix.smart_gas.responses.AuthResponse;
 import com.clalix.smart_gas.service.interfaces.UserService;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -23,17 +24,19 @@ public class UserController {
 
 
     @PostMapping("/register")
-    public ResponseEntity<AuthResponse> register(@RequestBody RegisterRequest req) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(userService.register(req));
+    public ResponseEntity<ApiResponse<AuthResponse>> register(@RequestBody RegisterRequest req) {
+        AuthResponse resp = userService.register(req);
+        return ResponseEntity.status(HttpStatus.CREATED).body(ApiResponse.success(resp.getMessage(), resp));
     }
 
     @PostMapping("/login")
-    public ResponseEntity<AuthResponse> login(@RequestBody LoginRequest req) {
-        return ResponseEntity.ok(userService.login(req));
+    public ResponseEntity<ApiResponse<AuthResponse>> login(@RequestBody LoginRequest req) {
+        AuthResponse resp = userService.login(req);
+        return ResponseEntity.ok(ApiResponse.success(resp.getMessage(), resp));
     }
 
     @GetMapping
-    public ResponseEntity<List<UserDto>> findAll() {
-        return ResponseEntity.ok(userService.findAll());
+    public ResponseEntity<ApiResponse<List<UserDto>>> findAll() {
+        return ResponseEntity.ok(ApiResponse.success("Users retrieved", userService.findAll()));
     }
 }

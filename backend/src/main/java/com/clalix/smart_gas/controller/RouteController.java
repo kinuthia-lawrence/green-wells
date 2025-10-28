@@ -19,6 +19,6 @@ public class RouteController {
     @GetMapping("/device")
     public ResponseEntity<ApiResponse<RouteDto>> getOptimizedRoute(@RequestParam String deviceId) {
         RouteDto route = routeService.getOptimizedRoute(deviceId);
-        return ResponseEntity.ok(new ApiResponse<>(true, "Optimized routes retrieved", route));
+        return ResponseEntity.ok(ApiResponse.success("Optimized route retrieved", route));
     }
 }

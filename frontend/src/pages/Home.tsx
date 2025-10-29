@@ -90,7 +90,7 @@ const Home: React.FC = () => {
       console.log("Response:", response);
       if (response.success) {
         setIsAuthenticated(true);
-        localStorage.setItem("user", response.data.user);
+        localStorage.setItem("user", JSON.stringify(response.data.user));
         setShowAuthModal(false);
         setLoginEmail("");
         setLoginPassword("");
@@ -209,7 +209,7 @@ const Home: React.FC = () => {
               className="bg-purple-700 text-white px-4 py-2 rounded hover:bg-purple-800 font-semibold"
               onClick={() => {
                 setMobileMenuOpen(false);
-                handleOpenModal("signin");
+                handleOpenModal();
               }}
               title="Sign in to your account"
             >

@@ -24,7 +24,7 @@ export const api: AxiosInstance = axios.create({
 });
 
 api.interceptors.response.use(
-  (resp) => resp.data,
+  (resp) => resp,
   (err) => {
     const message =
       err?.response?.data?.message || err.message || "Network error";

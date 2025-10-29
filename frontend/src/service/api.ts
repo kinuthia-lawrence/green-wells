@@ -1,8 +1,21 @@
 import axios, { type AxiosInstance } from "axios";
-import type { ApiResponse } from "../types/types";
+import type {
+  AlertItem,
+  AnalyticsSummary,
+  ApiResponse,
+  Device,
+  LoginResponse,
+  Notification,
+  PaymentReqest,
+  PaymentResponse,
+  PaymentSummary,
+  Route,
+  SensorReading,
+  User,
+} from "../types/types";
 
-// const API_BASE = 'http://localhost:8080/api'; // Local
-const API_BASE = "https://smart-gas.onrender.com/api"; // Remote
+const API_BASE = "http://localhost:8080/api"; // Local
+// const API_BASE = "https://smart-gas.onrender.com/api"; // Remote
 
 export const api: AxiosInstance = axios.create({
   baseURL: API_BASE,
@@ -21,79 +34,63 @@ api.interceptors.response.use(
 
 export const usersApi = {
   login: async (payload: { username: string; password: string }) =>
-    (
-      await api.post<ApiResponse<Record<string, unknown>>>(
-        "/users/login",
-        payload
-      )
-    ).data,
-  list: async () => (await api.get<ApiResponse<any[]>>("/users")).data,
+    api.post<ApiResponse<LoginResponse>>("/users/login", payload),
+  list: async () => api.get<ApiResponse<User[]>>("/users"),
   logout: () => {
     localStorage.removeItem("user");
   },
 };
 
 export const alertsApi = {
-  active: async () => (await api.get<ApiResponse<any[]>>("/alerts")).data,
-  all: async () => (await api.get<ApiResponse<any[]>>("/alerts/all")).data,
+  active: async () => api.get<ApiResponse<AlertItem[]>>("/alerts"),
+  all: async () => api.get<ApiResponse<AlertItem[]>>("/alerts/all"),
 };
 
 export const devicesApi = {
   getDevice: async (deviceId: string) =>
-    (
-      await api.get<ApiResponse<any>>(
-        `/devices/device?deviceId=${encodeURIComponent(deviceId)}`
-      )
-    ).data,
-  list: async () => (await api.get<ApiResponse<any[]>>("/devices")).data,
+    api.get<ApiResponse<Device>>(
+      `/devices/device?deviceId=${encodeURIComponent(deviceId)}`
+    ),
+  list: async () => api.get<ApiResponse<Device[]>>("/devices"),
 };
 
 export const analyticsApi = {
-  summary: async () => (await api.get<ApiResponse<any>>("/analytics")).data,
+  summary: async () => api.get<ApiResponse<AnalyticsSummary>>("/analytics"),
 };
 
 export const sensorApi = {
   latest: async (deviceId?: string) =>
-    (
-      await api.get<ApiResponse<any>>(
-        `/sensor/latest${
-          deviceId ? "?deviceId=" + encodeURIComponent(deviceId) : ""
-        }`
-      )
-    ).data,
-  all: async () => (await api.get<ApiResponse<any[]>>("/sensor/all")).data,
+    api.get<ApiResponse<SensorReading>>(
+      `/sensor/latest${
+        deviceId ? "?deviceId=" + encodeURIComponent(deviceId) : ""
+      }`
+    ),
+  all: async () => api.get<ApiResponse<SensorReading[]>>("/sensor/all"),
   history: async (deviceId: string, limit?: number) =>
-    (
-      await api.get<ApiResponse<any[]>>(
-        `/sensor/history?deviceId=${encodeURIComponent(deviceId)}${
-          limit ? "&limit=" + limit : ""
-        }`
-      )
-    ).data,
+    api.get<ApiResponse<SensorReading[]>>(
+      `/sensor/history?deviceId=${encodeURIComponent(deviceId)}${
+        limit ? "&limit=" + limit : ""
+      }`
+    ),
 };
 
 export const paymentApi = {
-  summary: async () =>
-    (await api.get<ApiResponse<any>>("/payment/summary")).data,
-  initiate: async (payload: any) =>
-    (await api.post<ApiResponse<any>>("/payment/initiate", payload)).data,
+  summary: async () => api.get<ApiResponse<PaymentSummary>>("/payment/summary"),
+  initiate: async (payload: PaymentReqest) =>
+    api.post<ApiResponse<PaymentResponse>>("/payment/initiate", payload),
   status: async (transactionId: string) =>
-    (
-      await api.get<ApiResponse<any>>(
-        `/payment/status/${encodeURIComponent(transactionId)}`
-      )
-    ).data,
+    api.get<ApiResponse<PaymentResponse>>(
+      `/payment/status/${encodeURIComponent(transactionId)}`
+    ),
 };
 
 export const notificationsApi = {
-  list: async () => (await api.get<ApiResponse<any[]>>("/notifications")).data,
+  list: async () => api.get<ApiResponse<Notification[]>>("/notifications"),
 };
 
 export const routesApi = {
   deviceRoute: async (deviceId: string) =>
-    (
-      await api.get<ApiResponse<any>>(
-        `/routes/device?deviceId=${encodeURIComponent(deviceId)}`
-      )
-    ).data,
+    api.get<ApiResponse<Route>>(
+      `/routes/device?deviceId=${encodeURIComponent(deviceId)}`
+    ),
 };

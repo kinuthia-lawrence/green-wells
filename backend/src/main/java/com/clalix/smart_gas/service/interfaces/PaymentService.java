@@ -3,6 +3,7 @@ package com.clalix.smart_gas.service.interfaces;
 import com.clalix.smart_gas.dto.PaymentDto;
 import com.clalix.smart_gas.requests.PaymentRequest;
 import com.clalix.smart_gas.responses.PaymentResponse;
+import com.clalix.smart_gas.responses.PaymentSummary;
 
 import java.util.List;
 
@@ -14,5 +15,5 @@ public interface PaymentService {
     void delete(Long id);
     PaymentResponse initiatePayment(PaymentRequest request);
     PaymentResponse getPaymentStatus(String transactionId);
-    Object getPaymentSummary(Long userId);
+    PaymentSummary getPaymentSummary(Long userId);
 }

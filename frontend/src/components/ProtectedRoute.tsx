@@ -2,7 +2,7 @@ import React from "react";
 import { Navigate, Outlet } from "react-router-dom";
 
 function getCurrentUser() {
-  const user = localStorage.getItem("tutornova_user");
+  const user = localStorage.getItem("user");
   return user ? JSON.parse(user) : null;
 }
 

@@ -83,7 +83,11 @@ public class UserServiceImpl implements UserService {
             Authentication authentication = authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(req.getUsername(), req.getPassword()));
             SecurityContextHolder.getContext().setAuthentication(authentication);
-            return new AuthResponse("Login successful");
+
+            User user = userRepository.findByUsernameOrEmail(req.getUsername())
+                    .orElse(null);
+
+            return new AuthResponse("Login successful", user);
         } catch (org.springframework.security.core.AuthenticationException ex) {
             throw new org.springframework.web.server.ResponseStatusException(org.springframework.http.HttpStatus.UNAUTHORIZED, "Invalid credentials");
         }
@@ -109,7 +113,7 @@ public class UserServiceImpl implements UserService {
         user.setRole(role);
         user.setPassword(passwordEncoder.encode(req.getPassword()));
         userRepository.save(user);
-        return new AuthResponse("User registered");
+        return new AuthResponse("User registered", user);
     }
 }
 

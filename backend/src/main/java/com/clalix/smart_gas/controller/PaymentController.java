@@ -3,6 +3,7 @@ package com.clalix.smart_gas.controller;
 import com.clalix.smart_gas.responses.ApiResponse;
 import com.clalix.smart_gas.requests.PaymentRequest;
 import com.clalix.smart_gas.responses.PaymentResponse;
+import com.clalix.smart_gas.responses.PaymentSummary;
 import com.clalix.smart_gas.service.interfaces.PaymentService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,8 +31,8 @@ public class PaymentController {
     }
 
     @GetMapping("/summary")
-    public ResponseEntity<ApiResponse<Object>> getPaymentSummary(@RequestParam(required = false) Long userId) {
-        Object summary = paymentService.getPaymentSummary(userId);
+    public ResponseEntity<ApiResponse<PaymentSummary>> getPaymentSummary(@RequestParam(required = false) Long userId) {
+        PaymentSummary summary = paymentService.getPaymentSummary(userId);
         return ResponseEntity.ok(ApiResponse.success("Payment summary retrieved", summary));
     }
 }

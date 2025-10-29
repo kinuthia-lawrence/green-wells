@@ -15,7 +15,7 @@ import { MdOutlineDashboard, MdOutlinePayment } from "react-icons/md";
 import { useLocation, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { usersApi } from "../service/api";
-import type { ApiResponse, LoginRequest } from "../types/types";
+import type { ApiResponse, LoginRequest, LoginResponse } from "../types/types";
 
 const features = [
   {
@@ -65,7 +65,7 @@ const Home: React.FC = () => {
   const [loginEmail, setLoginEmail] = useState("");
   const [loginPassword, setLoginPassword] = useState("");
   const handleCloseModal = () => setShowAuthModal(false);
-  const handleOpenModal = (tab: "signin" | "signup", redirectTo?: string) => {
+  const handleOpenModal = (redirectTo?: string) => {
     setShowAuthModal(true);
     if (redirectTo) setRedirectPath(redirectTo);
   };
@@ -85,7 +85,10 @@ const Home: React.FC = () => {
         username: loginEmail,
         password: loginPassword,
       };
-      const response: ApiResponse<any> = await usersApi.login(loginPayload);
+      const response: ApiResponse<LoginResponse> = await usersApi.login(
+        loginPayload
+      );
+      console.log("Response:", response);
       if (response.success) {
         setIsAuthenticated(true);
         setShowAuthModal(false);
@@ -141,13 +144,22 @@ const Home: React.FC = () => {
             Home
           </a>
           <a
-            href="/dashboard"
+            href="#"
             className={`font-medium px-1 transition ${
               location.pathname === "/dashboard"
                 ? "text-green-700 border-b-2 border-green-500"
                 : "text-black hover:text-green-700"
             }`}
             title="Go to Dashboard"
+            onClick={(e) => {
+              e.preventDefault();
+              setMobileMenuOpen(false);
+              if (isAuthenticated) {
+                navigate("/dashboard");
+              } else {
+                handleOpenModal("/dashboard");
+              }
+            }}
           >
             Dashboard
           </a>
@@ -155,11 +167,14 @@ const Home: React.FC = () => {
         {/* End: Sign In */}
         <div className="hidden md:flex md:w-1/3 justify-end gap-4">
           <button
-            className="bg-green-700 text-white px-4 py-2 rounded hover:bg-green-800 font-semibold"
-            onClick={() => handleOpenModal("signin")}
+            className="bg-purple-700 text-white px-4 py-2 rounded hover:bg-purple-800 font-semibold"
+            onClick={() => {
+              setMobileMenuOpen(false);
+              handleOpenModal();
+            }}
             title="Sign in to your account"
           >
-            Login
+            Sign In
           </button>
         </div>
         {/* Mobile nav buttons (none except Home/Dashboard) */}
@@ -183,7 +198,7 @@ const Home: React.FC = () => {
                 if (isAuthenticated) {
                   navigate("/dashboard");
                 } else {
-                  handleOpenModal("signin", "/dashboard");
+                  handleOpenModal("/dashboard");
                 }
               }}
             >
@@ -257,15 +272,25 @@ const Home: React.FC = () => {
             <div className="flex gap-4 mt-2">
               <button
                 className="bg-green-700 text-white px-6 py-3 rounded font-bold shadow hover:bg-green-800 transition"
-                onClick={() => handleOpenModal("signin")}
+                onClick={() => handleOpenModal()}
               >
                 Login
               </button>
               <a
-                href="/dashboard"
+                href="#"
                 className="bg-white border border-green-700 text-green-700 px-6 py-3 rounded font-bold shadow hover:bg-green-50 transition"
+                title="Go to Dashboard"
+                onClick={(e) => {
+                  e.preventDefault();
+                  setMobileMenuOpen(false);
+                  if (isAuthenticated) {
+                    navigate("/dashboard");
+                  } else {
+                    handleOpenModal("/dashboard");
+                  }
+                }}
               >
-                Go to Dashboard
+                Dashboard
               </a>
             </div>
             <div className="mt-6 flex flex-wrap gap-4">

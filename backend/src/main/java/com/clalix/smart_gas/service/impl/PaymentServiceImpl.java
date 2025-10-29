@@ -8,6 +8,7 @@ import com.clalix.smart_gas.repository.PaymentRepository;
 import com.clalix.smart_gas.repository.UserRepository;
 import com.clalix.smart_gas.requests.PaymentRequest;
 import com.clalix.smart_gas.responses.PaymentResponse;
+import com.clalix.smart_gas.responses.PaymentSummary;
 import com.clalix.smart_gas.service.interfaces.PaymentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -139,7 +140,7 @@ public class PaymentServiceImpl implements PaymentService {
     }
 
     @Override
-    public Object getPaymentSummary(Long userId) {
+    public PaymentSummary getPaymentSummary(Long userId) {
         Stream<Payment> stream = paymentRepository.findAll().stream();
         if (userId != null) {
             stream = stream.filter(p -> Objects.equals(userId, p.getUserId()));
@@ -156,14 +157,15 @@ public class PaymentServiceImpl implements PaymentService {
         long success = payments.stream().filter(p -> PaymentStatus.SUCCESS.equals(p.getStatus()) || PaymentStatus.PAID.equals(p.getStatus())).count();
         long failed = payments.stream().filter(p -> PaymentStatus.FAILED.equals(p.getStatus())).count();
 
-        Map<String, Object> summary = new HashMap<>();
-        summary.put("userId", userId);
-        summary.put("totalRevenue", totalRevenue);
-        summary.put("totalPayments", totalPayments);
-        summary.put("successfulPayments", success);
-        summary.put("failedPayments", failed);
-        summary.put("pendingPayments", pending);
+        PaymentSummary paymentSummary = PaymentSummary.builder()
+                .userId(userId)
+                .totalRevenue(totalRevenue)
+                .totalPayments(totalPayments)
+                .successfulPayments(success)
+                .failedPayments(failed)
+                .pendingPayments(pending)
+                .build();
 
-        return summary;
+        return paymentSummary;
     }
 }

@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/devices")
 @Tag(name = "Devices", description = "Devices API's")
@@ -25,5 +27,11 @@ public class DeviceController {
     public ResponseEntity<ApiResponse<Device>> findByDeviceId(@RequestParam String deviceId) {
         Device devices = deviceService.findByDeviceId(deviceId);
         return ResponseEntity.ok(ApiResponse.success("Device retrieved", devices));
+    }
+
+    @GetMapping
+    public ResponseEntity<ApiResponse<List<Device>>> findAll() {
+        List<Device> devices = deviceService.findAll();
+        return ResponseEntity.ok(ApiResponse.success("Devices retrieved", devices));
     }
 }

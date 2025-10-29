@@ -6,6 +6,8 @@ import com.clalix.smart_gas.service.interfaces.DeviceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class DeviceServiceImpl implements DeviceService {
     @Autowired
@@ -19,5 +21,10 @@ public class DeviceServiceImpl implements DeviceService {
     @Override
     public Device findByDeviceId(String deviceId) {
         return deviceRepository.findByDeviceId(deviceId).orElse(null);
+    }
+
+    @Override
+    public List<Device> findAll() {
+        return deviceRepository.findAll();
     }
 }

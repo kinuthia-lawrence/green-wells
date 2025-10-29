@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import {
   FaBars,
-  FaChalkboardTeacher,
   FaChartLine,
   FaGasPump,
   FaLeaf,
@@ -91,6 +90,7 @@ const Home: React.FC = () => {
       console.log("Response:", response);
       if (response.success) {
         setIsAuthenticated(true);
+        localStorage.setItem("user", response.data.user);
         setShowAuthModal(false);
         setLoginEmail("");
         setLoginPassword("");

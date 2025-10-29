@@ -33,8 +33,10 @@ api.interceptors.response.use(
 );
 
 export const usersApi = {
-  login: async (payload: { username: string; password: string }) =>
-    api.post<ApiResponse<LoginResponse>>("/users/login", payload),
+  login: async (payload: { username: string; password: string }): Promise<ApiResponse<LoginResponse>> => {
+    const res = await api.post<ApiResponse<LoginResponse>>("/users/login", payload)
+    return res.data;
+  },
   list: async () => api.get<ApiResponse<User[]>>("/users"),
   logout: () => {
     localStorage.removeItem("user");

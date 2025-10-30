@@ -23,7 +23,7 @@ public class DeviceController {
         this.deviceService = deviceService;
     }
 
-    @GetMapping("device")
+    @GetMapping("/device")
     public ResponseEntity<ApiResponse<Device>> findByDeviceId(@RequestParam String deviceId) {
         Device devices = deviceService.findByDeviceId(deviceId);
         return ResponseEntity.ok(ApiResponse.success("Device retrieved", devices));

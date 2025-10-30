@@ -1,21 +1,17 @@
 
 package com.clalix.smart_gas.config;
 
-import com.clalix.smart_gas.entities.Device;
-import com.clalix.smart_gas.entities.Notification;
-import com.clalix.smart_gas.entities.Route;
-import com.clalix.smart_gas.entities.User;
+import com.clalix.smart_gas.entities.*;
+import com.clalix.smart_gas.enums.PaymentStatus;
 import com.clalix.smart_gas.enums.UserRole;
-import com.clalix.smart_gas.repository.DeviceRepository;
-import com.clalix.smart_gas.repository.NotificationRepository;
-import com.clalix.smart_gas.repository.RouteRepository;
-import com.clalix.smart_gas.repository.UserRepository;
+import com.clalix.smart_gas.repository.*;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.time.LocalDateTime;
+import java.util.Random;
 
 @Configuration
 public class DataSeeder {
@@ -26,9 +22,11 @@ public class DataSeeder {
             DeviceRepository deviceRepo,
             NotificationRepository notificationRepo,
             RouteRepository routeRepo,
+            PaymentRepository paymentRepo,
             PasswordEncoder encoder
     ) {
         return args -> {
+            Random random = new Random();
             if (userRepo.count() == 0) {
                 for (int i = 1; i <= 10; i++) {
                     User user = User.builder()
@@ -64,6 +62,20 @@ public class DataSeeder {
                             .description("Route for " + user.getUsername() + "'s cylinder refill")
                             .build();
                     routeRepo.save(route);
+
+                    for (int p = 0; p < 3; p++) {
+                        PaymentStatus status = (p == 0) ? PaymentStatus.PAID : (p == 1) ? PaymentStatus.PENDING : PaymentStatus.FAILED;
+                        double amount = 100 + (random.nextDouble() * 400); // 100 - 500
+                        Payment payment = Payment.builder()
+                                .transactionId(java.util.UUID.randomUUID().toString())
+                                .amount(amount)
+                                .status(status)
+                                .paymentTime(LocalDateTime.now().minusDays(random.nextInt(30)))
+                                .method("CARD")
+                                .user(user)
+                                .build();
+                        paymentRepo.save(payment);
+                    }
                 }
             }
         };

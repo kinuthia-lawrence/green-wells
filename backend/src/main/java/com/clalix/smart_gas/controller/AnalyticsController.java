@@ -22,7 +22,6 @@ public class AnalyticsController {
 
     @GetMapping
     public ResponseEntity<ApiResponse<UsageAnalytics>> getAnalytics() {
-        UsageAnalytics analytics = analyticsService.getUsageAnalytics();
-        return ResponseEntity.ok(ApiResponse.success("Analytics retrieved", analytics));
+        return ResponseEntity.ok(analyticsService.getUsageAnalytics());
     }
 }

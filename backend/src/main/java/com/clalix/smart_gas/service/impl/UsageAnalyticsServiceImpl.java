@@ -7,13 +7,18 @@ import com.clalix.smart_gas.repository.AlertRepository;
 import com.clalix.smart_gas.repository.CylinderRepository;
 import com.clalix.smart_gas.repository.PaymentRepository;
 import com.clalix.smart_gas.repository.SensorReadingRepository;
+import com.clalix.smart_gas.responses.ApiResponse;
 import com.clalix.smart_gas.service.interfaces.UsageAnalyticsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Objects;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 public class UsageAnalyticsServiceImpl implements UsageAnalyticsService {
@@ -30,47 +35,74 @@ public class UsageAnalyticsServiceImpl implements UsageAnalyticsService {
     @Autowired
     private PaymentRepository paymentRepository;
 
+    private double round2(double value) {
+        return BigDecimal.valueOf(value).setScale(2, RoundingMode.HALF_UP).doubleValue();
+    }
+
     @Override
-    public UsageAnalytics getUsageAnalytics() {
-        UsageAnalytics analytics = new UsageAnalytics();
+    public ApiResponse<UsageAnalytics> getUsageAnalytics() {
+        try {
+            UsageAnalytics analytics = new UsageAnalytics();
 
-        // Calculate total usage from all sensor readings (use existing getter 'getGasValue')
-        double totalUsage = sensorReadingRepository.findAll().stream()
-                .mapToDouble(SensorReading::getGasValue)
-                .sum();
+            // take a single snapshot of readings
+            List<SensorReading> readings = sensorReadingRepository.findAll();
 
-        // Calculate average usage
-        long totalReadings = sensorReadingRepository.count();
-        Double averageUsage = totalReadings > 0 ? totalUsage / totalReadings : 0.0;
+            // Compute total usage as sum of decreases per device (previousLevel - currentLevel when positive)
+            double totalUsage = 0.0;
+            Map<String, List<SensorReading>> byDevice = readings.stream()
+                    .filter(r -> r.getDeviceId() != null && r.getTimestamp() != null)
+                    .collect(Collectors.groupingBy(SensorReading::getDeviceId));
 
-        // Count active devices (cylinders with recent readings) using sensor readings in last 24 hours
-        LocalDateTime last24Hours = LocalDateTime.now().minusHours(24);
-        long activeDevicesCount = sensorReadingRepository.findAll().stream()
-                .filter(r -> r.getTimestamp() != null && r.getTimestamp().isAfter(last24Hours))
-                .map(SensorReading::getDeviceId)
-                .filter(Objects::nonNull)
-                .distinct()
-                .count();
-        Integer activeDevices = (int) activeDevicesCount;
+            for (List<SensorReading> deviceReadings : byDevice.values()) {
+                deviceReadings.sort(java.util.Comparator.comparing(SensorReading::getTimestamp));
+                Double prev = null;
+                for (SensorReading sr : deviceReadings) {
+                    double curr = sr.getGasValue();
+                    if (prev != null) {
+                        double delta = prev - curr;
+                        if (delta > 0) {
+                            totalUsage += delta;
+                        }
+                    }
+                    prev = curr;
+                }
+            }
 
-        // Count total alerts
-        Integer totalAlerts = Math.toIntExact(alertRepository.count());
+            // readings count (use snapshot size)
+            long totalReadings = readings.size();
+            Double averageUsage = totalReadings > 0 ? totalUsage / totalReadings : 0.0;
 
-        // Payment statistics
-        Double totalRevenue = paymentRepository.getTotalRevenue();
-        Integer pendingPayments = Math.toIntExact(paymentRepository.countByStatus(PaymentStatus.PENDING));
-        Integer failedPayments = Math.toIntExact(paymentRepository.countByStatus(PaymentStatus.FAILED));
+            // active devices in last 24 hours (use snapshot)
+            LocalDateTime last24Hours = LocalDateTime.now().minusHours(24);
+            long activeDevicesCount = readings.stream()
+                    .filter(r -> r.getTimestamp() != null && r.getTimestamp().isAfter(last24Hours))
+                    .map(SensorReading::getDeviceId)
+                    .filter(java.util.Objects::nonNull)
+                    .distinct()
+                    .count();
+            Integer activeDevices = (int) activeDevicesCount;
 
-        analytics.setTotalUsage(totalUsage);
-        analytics.setAverageUsage(averageUsage);
-        analytics.setActiveDevices(activeDevices);
-        analytics.setTotalAlerts(totalAlerts);
-        analytics.setTotalRevenue(totalRevenue != null ? totalRevenue : 0);
-        analytics.setPendingPayments(pendingPayments);
-        analytics.setFailedPayments(failedPayments);
-        analytics.setLastUpdated(LocalDateTime.now());
+            // Count total alerts (keeps existing behaviour)
+            Integer totalAlerts = Math.toIntExact(alertRepository.count());
 
-        return analytics;
+            // Payment statistics (keep defensive null handling for revenue)
+            Double totalRevenue = paymentRepository.getTotalRevenue();
+            Integer pendingPayments = Math.toIntExact(paymentRepository.countByStatus(PaymentStatus.PENDING));
+            Integer failedPayments = Math.toIntExact(paymentRepository.countByStatus(PaymentStatus.FAILED));
+
+            analytics.setTotalUsage(round2(totalUsage));
+            analytics.setAverageUsage(round2(averageUsage));
+            analytics.setActiveDevices(activeDevices);
+            analytics.setTotalAlerts(totalAlerts);
+            analytics.setTotalRevenue(totalRevenue != null ? round2(totalRevenue) : 0);
+            analytics.setPendingPayments(pendingPayments);
+            analytics.setFailedPayments(failedPayments);
+            analytics.setLastUpdated(LocalDateTime.now());
+
+            return ApiResponse.success("Analytics retrieved", analytics);
+        } catch (Exception e) {
+            return ApiResponse.error(e.getMessage());
+        }
     }
 
     @Override
@@ -78,7 +110,7 @@ public class UsageAnalyticsServiceImpl implements UsageAnalyticsService {
         UsageAnalytics analytics = new UsageAnalytics();
 
         // Calculate usage for specific device (use getGasValue)
-        Double totalUsage = sensorReadingRepository.findAll().stream()
+        double totalUsage = sensorReadingRepository.findAll().stream()
                 .filter(r -> deviceId != null && deviceId.equals(r.getDeviceId()))
                 .mapToDouble(SensorReading::getGasValue)
                 .sum();
@@ -95,8 +127,8 @@ public class UsageAnalyticsServiceImpl implements UsageAnalyticsService {
 
         Integer totalAlerts = Math.toIntExact(alertRepository.countByCylinderDeviceId(deviceId));
 
-        analytics.setTotalUsage(totalUsage);
-        analytics.setAverageUsage(averageUsage);
+        analytics.setTotalUsage(round2(totalUsage));
+        analytics.setAverageUsage(round2(averageUsage));
         analytics.setActiveDevices(activeDevices);
         analytics.setTotalAlerts(totalAlerts);
         analytics.setLastUpdated(LocalDateTime.now());
@@ -131,8 +163,8 @@ public class UsageAnalyticsServiceImpl implements UsageAnalyticsService {
         Integer pendingPayments = Math.toIntExact(paymentRepository.countByStatusAndPaymentTimeBetween(PaymentStatus.PENDING, start, end));
         Integer failedPayments = Math.toIntExact(paymentRepository.countByStatusAndPaymentTimeBetween(PaymentStatus.FAILED, start, end));
 
-        analytics.setTotalUsage(totalUsage);
-        analytics.setAverageUsage(averageUsage);
+        analytics.setTotalUsage(round2(totalUsage));
+        analytics.setAverageUsage(round2(averageUsage));
         analytics.setActiveDevices(activeDevices);
         analytics.setTotalAlerts(totalAlerts);
         analytics.setTotalRevenue(totalRevenue != null ? totalRevenue : 0);

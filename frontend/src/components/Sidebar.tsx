@@ -1,6 +1,6 @@
-import { useRef, useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { FaGasPump } from "react-icons/fa";
 import { NavLink, useLocation } from "react-router-dom";
-import { FaRobot } from "react-icons/fa";
 import { navItems } from "../constants/dashboardNav";
 
 interface SidebarProps {
@@ -13,13 +13,13 @@ const Sidebar = ({ isOpen, toggleSidebar = () => {} }: SidebarProps) => {
   const sidebarRef = useRef<HTMLDivElement>(null);
   const [userData, setUserData] = useState({ name: "Guest", role: "guest" });
   useEffect(() => {
-    const stored = localStorage.getItem("tutornova_user");
+    const stored = localStorage.getItem("user");
     if (stored) {
       try {
         const parsed = JSON.parse(stored);
         setUserData({
-          name: parsed.name || parsed.email?.split("@")[0] || "User",
-          role: parsed.role || "student",
+          name: parsed.name || parsed.email?.split("@")[0],
+          role: parsed.role,
         });
       } catch {
         // fallback to guest
@@ -72,14 +72,14 @@ const Sidebar = ({ isOpen, toggleSidebar = () => {} }: SidebarProps) => {
           <div className="absolute inset-x-0 bottom-0 h-px bg-blue-500" />
           {isOpen ? (
             <div className="flex items-center px-6">
-              <FaRobot className="h-6 w-6 text-blue-500 mr-2" />
+              <FaGasPump className="h-6 w-6 text-blue-500 mr-2" />
               <span className="text-xl font-semibold text-gray-800">
-                TutorNova
+                SmartGas <span className="text-blue-600">Pro</span>
               </span>
             </div>
           ) : (
             <div className="flex items-center justify-center">
-              <FaRobot className="h-7 w-7 text-blue-500" />
+              <FaGasPump className="h-7 w-7 text-blue-500" />
             </div>
           )}
         </div>
@@ -106,7 +106,9 @@ const Sidebar = ({ isOpen, toggleSidebar = () => {} }: SidebarProps) => {
                       transition-all duration-200
                     `}
                   >
-                    <span className={`${isOpen ? "mr-3" : "mx-auto"} h-5 w-5`}>{item.icon}</span>
+                    <span className={`${isOpen ? "mr-3" : "mx-auto"} h-5 w-5`}>
+                      {item.icon}
+                    </span>
                     {isOpen && (
                       <span className="text-sm font-medium transition-colors">
                         {item.label}
@@ -125,7 +127,9 @@ const Sidebar = ({ isOpen, toggleSidebar = () => {} }: SidebarProps) => {
               <div className="flex items-center p-2 bg-gray-100 rounded-lg">
                 <div className="h-10 w-10 rounded-full bg-blue-500 flex items-center justify-center">
                   <span className="font-medium text-white text-sm">
-                    {userData?.name ? userData.name.charAt(0).toUpperCase() : "U"}
+                    {userData?.name
+                      ? userData.name.charAt(0).toUpperCase()
+                      : "U"}
                   </span>
                 </div>
                 <div className="ml-3">
@@ -141,7 +145,9 @@ const Sidebar = ({ isOpen, toggleSidebar = () => {} }: SidebarProps) => {
               <div className="flex justify-center">
                 <div className="h-10 w-10 rounded-full bg-blue-500 flex items-center justify-center">
                   <span className="font-medium text-white text-sm">
-                    {userData?.name ? userData.name.charAt(0).toUpperCase() : "U"}
+                    {userData?.name
+                      ? userData.name.charAt(0).toUpperCase()
+                      : "U"}
                   </span>
                 </div>
               </div>

@@ -41,7 +41,8 @@ export default function DeviceChart({
   };
 
   return (
-    <div className="bg-white p-4 rounded border">
+    <div className="bg-green-50 p-4 rounded-xl border shadow w-full max-w-2xl mx-auto">
+      <h2 className="text-green-700 font-bold mb-2 text-lg">Gas Usage Chart</h2>
       <Line data={data} />
     </div>
   );

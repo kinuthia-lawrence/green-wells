@@ -1,20 +1,68 @@
+export type Cylinder = {
+  id: number;
+  serialNumber: string;
+  capacity: number;
+  deviceId: string;
+  status: string;
+  owner: string;
+};
+
+export type Payment = {
+  id: number;
+  transactionId: string;
+  amount: number;
+  paymentTime: string;
+  status: string;
+  method: string;
+  userId: number;
+  user: string;
+};
+
+export type Alert = {
+  id: number;
+  message: string;
+  type: string;
+  severity: string;
+  timestamp: string;
+  resolvedAt: string;
+  userId: number;
+  deviceId: string;
+  user: string;
+  cylinder: Cylinder;
+  active: boolean;
+};
+
+export type Notification = {
+  id: number;
+  message: string;
+  read: boolean;
+  timestamp: string;
+  user: string;
+  userId: number;
+};
+
 export type User = {
   id: number;
   username: string;
   email: string;
-  // Add other user fields as needed
+  phoneNumber: string;
+  password: string;
+  role: string;
+  payments: Payment[];
+  alerts: Alert[];
+  notifications: Notification[];
+  cylinders: Cylinder[];
 };
 
 export type Device = {
   id: number;
   deviceId: string;
-  name?: string;
-  model?: string;
-  createdAt: string; // ISO timestamp
-  lastSeen?: string; // ISO timestamp
-  user?: User;
+  name: string;
+  model: string;
+  createdAt: string;
+  lastSeen: string;
+  userId?: number;
 };
-
 
 export type SensorReading = {
   id?: number;
@@ -48,7 +96,6 @@ export type ApiResponse<T> = {
   success: boolean;
   message: string;
   data: T;
-  error?: string;
 };
 export type PaymentSummary = {
   userId: number | null;
@@ -79,20 +126,11 @@ export type PaymentResponse = {
   userId: number;
 };
 
-export type Notification = {
-  id: number | string;
-  title: string;
-  message: string;
-  timestamp: string;
-  read?: boolean;
-};
-
 export type Route = {
   deviceId: string;
   path: Array<{ latitude: number; longitude: number; timestamp: string }>;
 };
 
- 
 export type AnalyticsSummary = {
   totalUsage: number;
   averageUsage: number;
@@ -101,5 +139,5 @@ export type AnalyticsSummary = {
   totalRevenue: number;
   pendingPayments: number;
   failedPayments: number;
-  lastUpdated: string; 
+  lastUpdated: string;
 };

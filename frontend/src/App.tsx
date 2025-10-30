@@ -6,9 +6,8 @@ import Alerts from "./pages/Alerts";
 import Dashboard from "./pages/Dashboard";
 import DeviceDetails from "./pages/DeviceDetails";
 import Devices from "./pages/Devices";
-import Payment from "./pages/Payment";
 import Home from "./pages/Home";
-import Notifications from "./pages/Notifications";
+import Payment from "./pages/Payment";
 
 export default function App() {
   return (
@@ -33,7 +32,6 @@ export default function App() {
             <Route path="devices/:id" element={<DeviceDetails />} />
             <Route path="alerts" element={<Alerts />} />
             <Route path="payments" element={<Payment />} />
-            <Route path="notifications" element={<Notifications />} />
             <Route
               path="*"
               element={

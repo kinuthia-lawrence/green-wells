@@ -17,14 +17,14 @@ const Header = ({ isOpen, toggleSidebar }: HeaderProps) => {
   });
 
   useEffect(() => {
-    const stored = localStorage.getItem("tutornova_user");
+    const stored = localStorage.getItem("user");
     if (stored) {
       try {
         const parsed = JSON.parse(stored);
         setUserData({
           name: parsed.name || parsed.email?.split("@")[0] || "User",
           email: parsed.email || "",
-          role: parsed.role || "student",
+          role: parsed.role ,
         });
       } catch {
         // fallback to guest
@@ -47,13 +47,13 @@ const Header = ({ isOpen, toggleSidebar }: HeaderProps) => {
         </button>
         <div className="ml-4 flex items-center">
           <span className="text-sm sm:text-2xl font-extrabold text-blue-600">
-            Tutor
+            Smart
           </span>
           <span className="text-sm sm:text-2xl font-extrabold text-gray-700">
-            Nova
+            Gas
           </span>
           <span className="hidden lg:block ml-2 px-2 py-0.5 text-xs font-medium bg-blue-100 text-blue-700 rounded-md">
-            Platform
+            Pro
           </span>
         </div>
       </div>
@@ -66,7 +66,7 @@ const Header = ({ isOpen, toggleSidebar }: HeaderProps) => {
         </span>
         {/* Notifications icon button */}
         <Link
-          to="/dashboard/notifications"
+          to="/dashboard/alerts"
           className="relative flex items-center justify-center w-10 h-10 rounded-lg bg-gray-100 hover:bg-blue-50 text-gray-600 hover:text-blue-600 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500/50"
           title="Notifications"
           aria-label="Notifications"

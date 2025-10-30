@@ -39,4 +39,7 @@ public class UserController {
     public ResponseEntity<ApiResponse<List<UserDto>>> findAll() {
         return ResponseEntity.ok(ApiResponse.success("Users retrieved", userService.findAll()));
     }
+
+    @GetMapping
+    public ResponseEntity<ApiResponse<User>>
 }

@@ -7,9 +7,11 @@ import {
   LineElement,
   Tooltip,
   Legend,
+  CategoryScale,
 } from "chart.js";
 import "chartjs-adapter-date-fns";
 import type { SensorReading } from "../types/types";
+import type { ChartOptions } from "chart.js";
 
 ChartJS.register(
   TimeScale,
@@ -17,7 +19,8 @@ ChartJS.register(
   PointElement,
   LineElement,
   Tooltip,
-  Legend
+  Legend,
+  CategoryScale
 );
 
 export default function DeviceChart({
@@ -40,10 +43,37 @@ export default function DeviceChart({
     ],
   };
 
+  const options: ChartOptions<"line"> = {
+    responsive: true,
+    plugins: {
+      legend: { display: true },
+      tooltip: { enabled: true },
+    },
+    scales: {
+      x: {
+        type: "time" as const,
+        time: {
+          unit: "hour",
+          tooltipFormat: "PPpp",
+        },
+        title: {
+          display: true,
+          text: "Timestamp",
+        },
+      },
+      y: {
+        title: {
+          display: true,
+          text: "Gas Value",
+        },
+      },
+    },
+  };
+
   return (
     <div className="bg-green-50 p-4 rounded-xl border shadow w-full max-w-2xl mx-auto">
       <h2 className="text-green-700 font-bold mb-2 text-lg">Gas Usage Chart</h2>
-      <Line data={data} />
+      <Line data={data} options={options} />
     </div>
   );
 }

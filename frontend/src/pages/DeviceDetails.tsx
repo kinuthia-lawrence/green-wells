@@ -15,13 +15,19 @@ export default function DeviceDetails() {
     setInfoLoading(true);
     devicesApi
       .getDevice(id)
-      .then((r) => setDevice(r.data.data))
+      .then((r) => {
+        console.log("Device", r.data.data);
+        setDevice(r.data.data);
+      })
       .catch(() => setDevice(null))
       .finally(() => setInfoLoading(false));
 
     sensorApi
       .history(id)
-      .then((r) => setReadings(r.data.data || []))
+      .then((r) => {
+        console.log("Readings", r.data.data[0]);
+        setReadings(r.data.data || []);
+      })
       .catch(() => setReadings([]));
   }, [id]);
 
@@ -51,72 +57,12 @@ export default function DeviceDetails() {
                     : "Never"}
                 </div>
                 <div className="text-xs text-gray-500">
-                  Owner:{" "}
-                  <span className="font-semibold">{device.user?.username}</span>
-                </div>
-                <div className="text-xs text-gray-500">
-                  Cylinders:{" "}
+                  Owner User ID:{" "}
                   <span className="font-semibold">
-                    {device.user?.cylinders?.length ?? 0}
+                    {device.userId ?? "N/A"}
                   </span>
                 </div>
               </div>
-              <div>
-                <div className="font-bold text-purple-700 mb-2">
-                  User Details
-                </div>
-                <div className="text-xs text-gray-500">
-                  Email: {device.user?.email}
-                </div>
-                <div className="text-xs text-gray-500">
-                  Phone: {device.user?.phoneNumber}
-                </div>
-                <div className="text-xs text-gray-500">
-                  Role: {device.user?.role}
-                </div>
-              </div>
-            </div>
-            <div className="mt-4">
-              <div className="font-bold text-green-700 mb-2">Cylinders</div>
-              <ul className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                {device.user?.cylinders?.length ? (
-                  device.user.cylinders.map((c) => (
-                    <li
-                      key={c.id}
-                      className="bg-white rounded border p-2 text-xs"
-                    >
-                      SN:{" "}
-                      <span className="font-semibold">{c.serialNumber}</span> |
-                      Capacity: {c.capacity}kg | Status: {c.status}
-                    </li>
-                  ))
-                ) : (
-                  <li className="text-xs text-gray-500">No cylinders</li>
-                )}
-              </ul>
-            </div>
-            <div className="mt-4">
-              <div className="font-bold text-green-700 mb-2">Recent Alerts</div>
-              <ul className="space-y-2">
-                {device.user?.alerts?.length ? (
-                  device.user.alerts.slice(0, 5).map((a) => (
-                    <li
-                      key={a.id}
-                      className="bg-white rounded border p-2 text-xs"
-                    >
-                      <span className="font-semibold text-purple-700">
-                        {a.type}
-                      </span>
-                      : {a.message}{" "}
-                      <span className="text-gray-400">
-                        ({new Date(a.timestamp).toLocaleString()})
-                      </span>
-                    </li>
-                  ))
-                ) : (
-                  <li className="text-xs text-gray-500">No alerts</li>
-                )}
-              </ul>
             </div>
             <div className="mt-4">
               <DeviceChart readings={readings} />

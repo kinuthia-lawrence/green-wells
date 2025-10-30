@@ -75,6 +75,8 @@ export type SensorReading = {
   longitude?: number;
 };
 
+
+
 export type AlertItem = {
   id: number | string;
   type: string;

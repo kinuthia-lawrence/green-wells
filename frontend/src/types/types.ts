@@ -15,13 +15,6 @@ export type Device = {
   user?: User;
 };
 
-export type DeviceSummary = {
-  deviceId: string;
-  status: string;
-  lastReading?: string;
-  latitude?: number;
-  longitude?: number;
-};
 
 export type SensorReading = {
   id?: number;
@@ -99,9 +92,14 @@ export type Route = {
   path: Array<{ latitude: number; longitude: number; timestamp: string }>;
 };
 
+ 
 export type AnalyticsSummary = {
-  totalDevices: number;
-  totalAlerts: number;
-  totalUsers: number;
+  totalUsage: number;
+  averageUsage: number;
   activeDevices: number;
+  totalAlerts: number;
+  totalRevenue: number;
+  pendingPayments: number;
+  failedPayments: number;
+  lastUpdated: string; 
 };

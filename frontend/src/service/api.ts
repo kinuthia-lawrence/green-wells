@@ -6,6 +6,7 @@ import type {
   Device,
   LoginResponse,
   Notification,
+  Payment,
   PaymentReqest,
   PaymentResponse,
   PaymentSummary,
@@ -33,8 +34,14 @@ api.interceptors.response.use(
 );
 
 export const usersApi = {
-  login: async (payload: { username: string; password: string }): Promise<ApiResponse<LoginResponse>> => {
-    const res = await api.post<ApiResponse<LoginResponse>>("/users/login", payload)
+  login: async (payload: {
+    username: string;
+    password: string;
+  }): Promise<ApiResponse<LoginResponse>> => {
+    const res = await api.post<ApiResponse<LoginResponse>>(
+      "/users/login",
+      payload
+    );
     return res.data;
   },
   list: async () => api.get<ApiResponse<User[]>>("/users"),
@@ -44,7 +51,10 @@ export const usersApi = {
 };
 
 export const alertsApi = {
-  active: async () => api.get<ApiResponse<AlertItem[]>>("/alerts"),
+  active: async (deviceId?: string) =>
+    api.get<ApiResponse<AlertItem[]>>(
+      `/alerts${deviceId ? `?deviceId=${encodeURIComponent(deviceId)}` : ""}`
+    ),
   all: async () => api.get<ApiResponse<AlertItem[]>>("/alerts/all"),
 };
 
@@ -84,6 +94,7 @@ export const paymentApi = {
     api.get<ApiResponse<PaymentResponse>>(
       `/payment/status/${encodeURIComponent(transactionId)}`
     ),
+  list: async () => api.get<ApiResponse<Payment[]>>("/payment"),
 };
 
 export const notificationsApi = {

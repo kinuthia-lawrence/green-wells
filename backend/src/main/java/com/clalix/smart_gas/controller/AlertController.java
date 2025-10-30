@@ -24,7 +24,7 @@ public class AlertController {
     }
 
     @GetMapping
-    public ResponseEntity<ApiResponse<List<AlertDto>>> getActiveAlerts(@RequestParam(required = false) String deviceId) {
+    public ResponseEntity<ApiResponse<List<AlertDto>>> getActiveAlerts(@RequestParam String deviceId) {
         List<AlertDto> alerts = alertService.getActiveAlerts(deviceId);
         return ResponseEntity.ok(ApiResponse.success("Active alerts retrieved", alerts));
     }

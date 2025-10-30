@@ -7,6 +7,7 @@ import com.clalix.smart_gas.enums.PaymentStatus;
 import com.clalix.smart_gas.repository.PaymentRepository;
 import com.clalix.smart_gas.repository.UserRepository;
 import com.clalix.smart_gas.requests.PaymentRequest;
+import com.clalix.smart_gas.responses.ApiResponse;
 import com.clalix.smart_gas.responses.PaymentResponse;
 import com.clalix.smart_gas.responses.PaymentSummary;
 import com.clalix.smart_gas.service.interfaces.PaymentService;
@@ -67,8 +68,13 @@ public class PaymentServiceImpl implements PaymentService {
     }
 
     @Override
-    public List<PaymentDto> getAll() {
-        return paymentRepository.findAll().stream().map(this::toDto).collect(Collectors.toList());
+    public ApiResponse<List<PaymentDto>> getAll() {
+        try {
+
+            return ApiResponse.success("All payments retrieved", paymentRepository.findAll().stream().map(this::toDto).collect(Collectors.toList()));
+        } catch (Exception e) {
+            return ApiResponse.error(e.getMessage());
+        }
     }
 
     @Override

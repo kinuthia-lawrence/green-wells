@@ -8,6 +8,7 @@ import DeviceDetails from "./pages/DeviceDetails";
 import Devices from "./pages/Devices";
 import Home from "./pages/Home";
 import Payment from "./pages/Payment";
+import EmergencyResponse from "./pages/EmergencyResponse";
 
 export default function App() {
   return (
@@ -32,6 +33,10 @@ export default function App() {
             <Route path="devices/:id" element={<DeviceDetails />} />
             <Route path="alerts" element={<Alerts />} />
             <Route path="payments" element={<Payment />} />
+            <Route
+              path="/dashboard/devices/:id/emergency"
+              element={<EmergencyResponse />}
+            />
             <Route
               path="*"
               element={

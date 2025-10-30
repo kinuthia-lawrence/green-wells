@@ -1,4 +1,3 @@
-
 package com.clalix.smart_gas.config;
 
 import com.clalix.smart_gas.entities.*;
@@ -28,13 +27,24 @@ public class DataSeeder {
         return args -> {
             Random random = new Random();
             if (userRepo.count() == 0) {
+                // Create admin separately
+                User adminUser = User.builder()
+                        .username("Admin")
+                        .email("admin@smartgas.com")
+                        .phoneNumber("0700000000")
+                        .password(encoder.encode("password"))
+                        .role(UserRole.ADMIN)
+                        .build();
+                userRepo.save(adminUser);
+
+                // Create regular users and their devices/payments/etc.
                 for (int i = 1; i <= 10; i++) {
                     User user = User.builder()
                             .username("user" + i)
                             .email("user" + i + "@smartgas.com")
                             .phoneNumber("07000000" + String.format("%02d", i))
                             .password(encoder.encode("password" + i))
-                            .role(i == 1 ? UserRole.ADMIN : UserRole.USER)
+                            .role(UserRole.USER)
                             .build();
                     userRepo.save(user);
 
@@ -62,7 +72,6 @@ public class DataSeeder {
                             .description("Route for " + user.getUsername() + "'s cylinder refill")
                             .build();
                     routeRepo.save(route);
-
                     for (int p = 0; p < 3; p++) {
                         PaymentStatus status = (p == 0) ? PaymentStatus.PAID : (p == 1) ? PaymentStatus.PENDING : PaymentStatus.FAILED;
                         double amount = 100 + (random.nextDouble() * 400); // 100 - 500

@@ -6,7 +6,7 @@ export type Cylinder = {
   status: string;
   owner: string;
 };
-
+  
 export type Payment = {
   id: number;
   transactionId: string;
@@ -15,7 +15,6 @@ export type Payment = {
   status: string;
   method: string;
   userId: number;
-  user: string;
 };
 
 export type Alert = {
@@ -78,10 +77,17 @@ export type SensorReading = {
 
 
 export type AlertItem = {
-  id: number | string;
-  type: string;
+  id: number;
   message: string;
-  timestamp: string; // ISO
+  type: string;
+  severity: string;
+  timestamp: string;
+  resolvedAt: string | null;
+  userId: number | null;
+  deviceId: string;
+  cylinderId: number | null;
+  userEmail: string | null;
+  active: boolean;
 };
 
 export type LoginRequest = {
@@ -143,3 +149,24 @@ export type AnalyticsSummary = {
   failedPayments: number;
   lastUpdated: string;
 };
+
+
+export interface RouteSegment {
+  distance: number;
+  duration: number;
+}
+
+export interface RouteProperties {
+  segments: RouteSegment[];
+  summary?: {
+    description: string;
+  };
+}
+
+export interface RouteFeature {
+  properties: RouteProperties;
+}
+
+export interface EmergencyRoute {
+  features: RouteFeature[];
+}

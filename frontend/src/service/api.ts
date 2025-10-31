@@ -15,8 +15,8 @@ import type {
   User,
 } from "../types/types";
 
-const API_BASE = "http://localhost:8080/api"; // Local
-// const API_BASE = "https://smart-gas.onrender.com/api"; // Remote
+// const API_BASE = "http://localhost:8080/api"; // Local
+const API_BASE = "https://smart-gas.onrender.com/api"; // Remote
 
 export const api: AxiosInstance = axios.create({
   baseURL: API_BASE,

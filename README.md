@@ -58,3 +58,41 @@ Traditional LPG distribution requires customers to purchase expensive full cylin
 ### **Community Challenge Solved:**
 
 Energy poverty affects millions who cannot afford LPG upfront costs, forcing reliance on unsafe alternatives like charcoal. Our micro-payment system (KES 50 minimum) makes clean energy accessible while IoT safety monitoring protects families from gas-related accident.
+
+---
+
+## 3. 🛠️ Technology Stack
+
+**Hardware & IoT:**
+
+- Arduino & Raspberry Pi microcontrollers
+- MQTT & GSM communication protocols
+- Real-time pressure and temperature sensors
+
+**Mobile Application:**
+
+- Flutter (iOS/Android cross-platform)
+- Dart programming language
+- M-Pesa Money API integration
+
+**Backend & Cloud:**
+
+- Java Spring Boot
+- Render cloud infrastructure
+
+**Operations Dashboard:**
+
+- React.js frontend
+- Real-time data visualization
+
+**Payment & Integration:**
+
+- M-Pesa API
+- Mobile money transaction processing
+
+**Development & DevOps:**
+
+- Git version control
+- Docker containerization
+- CI/CD deployment pipelines
+- Proven open-source technologies

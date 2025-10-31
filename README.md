@@ -64,35 +64,45 @@ Energy poverty affects millions who cannot afford LPG upfront costs, forcing rel
 ## 3. 🛠️ Technology Stack
 
 **Hardware & IoT:**
-
 - Arduino & Raspberry Pi microcontrollers
 - MQTT & GSM communication protocols
 - Real-time pressure and temperature sensors
 
 **Mobile Application:**
-
 - Flutter (iOS/Android cross-platform)
 - Dart programming language
-- M-Pesa Money API integration
+- M-Pesa/Airtel Money API integration
+- Google Maps API for location tracking & emergency dispatch
 
-**Backend & Cloud:**
-
-- Java Spring Boot
-- Render cloud infrastructure
-
-**Operations Dashboard:**
-
-- React.js frontend
+**Frontend Web Applications:**
+- React.js (TypeScript)
+- React Router for navigation
+- Tailwind CSS for responsive design
 - Real-time data visualization
 
-**Payment & Integration:**
+**Backend & Cloud:**
+- Java Spring Boot microservices
+- AWS/Azure cloud infrastructure
+- Scalable database architecture
 
+**Payment & Integration:**
 - M-Pesa API
+- Airtel Money API
+- Google Maps API (emergency response & tracking)
 - Mobile money transaction processing
 
 **Development & DevOps:**
-
 - Git version control
 - Docker containerization
 - CI/CD deployment pipelines
+- Maven build tool
 - Proven open-source technologies
+
+---
+
+## 🔐 Test Credentials
+
+```
+Email: admin@smartgas.com
+Password: password
+```
